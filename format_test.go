@@ -1,11 +1,13 @@
 package format
 
 import (
-	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"os"
+	"strings"
 	"testing"
+
+	"github.com/andreyvit/diff"
 )
 
 func testFile(t *testing.T, path string) {
@@ -31,8 +33,11 @@ func testFile(t *testing.T, path string) {
 		t.Error(err)
 	}
 
-	if bytes.Compare(b, fileBytes) != 0 {
-		t.Errorf("Bytes did not match:\n%s", b)
+	formattedJSON := string(b)
+	originalJSON := string(fileBytes)
+
+	if strings.Compare(formattedJSON, originalJSON) != 0 {
+		t.Errorf("Did not match:\n%v", diff.LineDiff(formattedJSON, originalJSON))
 	}
 }
 
