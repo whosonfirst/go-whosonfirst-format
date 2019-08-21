@@ -30,27 +30,27 @@ func FormatFeature(feature *Feature) ([]byte, error) {
 		return buf.Bytes(), err
 	}
 
-	err = writeKey(&buf, "id", feature.ID, true, false)
+	err = writeKey(&buf, "id", feature.ID, true, false, false)
 	if err != nil {
 		return buf.Bytes(), err
 	}
 
-	err = writeKey(&buf, "type", feature.Type, true, false)
+	err = writeKey(&buf, "type", feature.Type, true, false, false)
 	if err != nil {
 		return buf.Bytes(), err
 	}
 
-	err = writeKey(&buf, "properties", feature.Properties, true, false)
+	err = writeKey(&buf, "properties", feature.Properties, true, true, false)
 	if err != nil {
 		return buf.Bytes(), err
 	}
 
-	err = writeKey(&buf, "bbox", feature.Bbox, true, false)
+	err = writeKey(&buf, "bbox", feature.Bbox, true, false, false)
 	if err != nil {
 		return buf.Bytes(), err
 	}
 
-	err = writeKey(&buf, "geometry", feature.Geometry, false, true)
+	err = writeKey(&buf, "geometry", feature.Geometry, false, false, true)
 	if err != nil {
 		return buf.Bytes(), err
 	}
@@ -63,14 +63,21 @@ func FormatFeature(feature *Feature) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func writeKey(buf *bytes.Buffer, key string, value interface{}, usePretty bool, lastLine bool) error {
+func writeKey(buf *bytes.Buffer, key string, value interface{}, usePretty, deepIndent, lastLine bool) error {
 	valueJSON, err := json.Marshal(value)
 	if err != nil {
 		return err
 	}
 
 	if usePretty {
-		prettyOpts := &pretty.Options{Indent: nestedIndent, SortKeys: true, Prefix: indent}
+		prefix := indent
+
+		prettyIndent := indent
+		if deepIndent {
+			prettyIndent = nestedIndent
+		}
+
+		prettyOpts := &pretty.Options{Indent: prettyIndent, SortKeys: true, Prefix: prefix}
 		valueJSON = pretty.PrettyOptions(valueJSON, prettyOpts)
 		// Trim the newline that comes back from pretty, so we can control it last
 		valueJSON = valueJSON[:len(valueJSON)-1]
