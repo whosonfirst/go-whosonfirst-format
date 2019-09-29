@@ -1,4 +1,4 @@
-package format
+package format_test
 
 import (
 	"encoding/json"
@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/andreyvit/diff"
+	format "github.com/tomtaylor/go-whosonfirst-format"
 )
 
 func testFile(t *testing.T, path string) {
@@ -21,14 +22,14 @@ func testFile(t *testing.T, path string) {
 		t.Error(err)
 	}
 
-	var feature Feature
+	var feature format.Feature
 
 	json.Unmarshal(fileBytes, &feature)
 	if err != nil {
 		t.Error(err)
 	}
 
-	b, err := FormatFeature(&feature)
+	b, err := format.FormatFeature(&feature)
 	if err != nil {
 		t.Error(err)
 	}
