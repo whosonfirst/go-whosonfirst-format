@@ -54,7 +54,7 @@ func FormatFeature(feature *Feature) ([]byte, error) {
 		return buf.Bytes(), err
 	}
 
-	_, err = buf.WriteString("\n}")
+	_, err = buf.WriteString("\n}\n")
 	if err != nil {
 		return buf.Bytes(), err
 	}
