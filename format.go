@@ -19,7 +19,6 @@ type Feature struct {
 
 // two space indent
 const indent = "  "
-const nestedIndent = "    "
 
 // FormatFeature transforms a Feature into a correctly formatted WOF file
 func FormatFeature(feature *Feature) ([]byte, error) {
