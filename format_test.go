@@ -36,15 +36,11 @@ func testFile(t *testing.T, path string) {
 	formattedJSON := string(b)
 	originalJSON := string(fileBytes)
 
-	if strings.Compare(formattedJSON, originalJSON) != 0 {
-		t.Errorf("Did not match:\n%v", diff.LineDiff(formattedJSON, originalJSON))
+	if strings.Compare(originalJSON, formattedJSON) != 0 {
+		t.Errorf("Did not match:\n%v", diff.LineDiff(originalJSON, formattedJSON))
 	}
 }
 
-func TestFormatNewYork(t *testing.T) {
-	testFile(t, "fixtures/85977539.geojson")
-}
-
-func TestFormatUnitedKingdom(t *testing.T) {
-	testFile(t, "fixtures/85633159.geojson")
+func TestFormat(t *testing.T) {
+	testFile(t, "fixtures/85790327.geojson")
 }
