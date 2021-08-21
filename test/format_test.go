@@ -43,6 +43,8 @@ func testFile(t *testing.T, inputPath string, expectedOutputPath string) {
 	if strings.Compare(expectedJSON, formattedJSON) != 0 {
 		d := diff.LineDiff(expectedJSON, formattedJSON)
 		t.Errorf("%s and %s did not match:\n%v", inputPath, expectedOutputPath, d)
+	} else {
+		t.Logf("%s and %s matched", inputPath, expectedOutputPath)
 	}
 }
 
