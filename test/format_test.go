@@ -4,27 +4,30 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
+	"path"
 	"strings"
 	"testing"
 
 	"github.com/andreyvit/diff"
-	format "github.com/tomtaylor/go-whosonfirst-format"
+	format "github.com/whosonfirst/go-whosonfirst-format"
 )
 
-func testFile(t *testing.T, path string) {
-	file, err := os.Open(path)
+const fixturesPath = "fixtures"
+
+func testFile(t *testing.T, inputPath string, expectedOutputPath string) {
+	inputBytes, err := ioutil.ReadFile(inputPath)
 	if err != nil {
 		t.Error(err)
 	}
 
-	fileBytes, err := ioutil.ReadAll(file)
+	expectedBytes, err := ioutil.ReadFile(expectedOutputPath)
 	if err != nil {
 		t.Error(err)
 	}
 
 	var feature format.Feature
 
-	json.Unmarshal(fileBytes, &feature)
+	json.Unmarshal(inputBytes, &feature)
 	if err != nil {
 		t.Error(err)
 	}
@@ -35,13 +38,41 @@ func testFile(t *testing.T, path string) {
 	}
 
 	formattedJSON := string(b)
-	originalJSON := string(fileBytes)
+	expectedJSON := string(expectedBytes)
 
-	if strings.Compare(originalJSON, formattedJSON) != 0 {
-		t.Errorf("Did not match:\n%v", diff.LineDiff(originalJSON, formattedJSON))
+	if strings.Compare(expectedJSON, formattedJSON) != 0 {
+		d := diff.LineDiff(expectedJSON, formattedJSON)
+		t.Errorf("%s and %s did not match:\n%v", inputPath, expectedOutputPath, d)
+	} else {
+		t.Logf("%s and %s matched", inputPath, expectedOutputPath)
 	}
 }
 
 func TestFormat(t *testing.T) {
-	testFile(t, "fixtures/85790327.geojson")
+	files, err := os.ReadDir(fixturesPath)
+	if err != nil {
+		t.Error(err)
+	}
+
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+
+		n := file.Name()
+
+		if !strings.HasSuffix(n, ".geojson") {
+			continue
+		}
+
+		if strings.HasSuffix(n, ".expected.geojson") {
+			continue
+		}
+
+		inputPath := path.Join(fixturesPath, n)
+		expectedPath := path.Join(fixturesPath, strings.Replace(n, ".geojson", ".expected.geojson", 1))
+
+		testFile(t, inputPath, expectedPath)
+	}
+
 }
