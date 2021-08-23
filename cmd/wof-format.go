@@ -19,13 +19,13 @@ func main() {
 	if flag.NArg() == 0 {
 		info, err := os.Stdin.Stat()
 		if err != nil {
-			fmt.Printf("Unable to open stdin: %s", err)
+			fmt.Fprintf(os.Stderr, "Unable to open stdin: %s\n", err)
 			os.Exit(1)
 			return
 		}
 
 		if (info.Mode() & os.ModeCharDevice) != 0 {
-			fmt.Println("Usage: cat input.geojson | wof-format > output.geojson")
+			fmt.Fprintf(os.Stderr, "Usage: cat input.geojson | wof-format > output.geojson\n")
 			os.Exit(1)
 			return
 		}
@@ -34,7 +34,7 @@ func main() {
 	} else {
 		f, err := os.Open(flag.Arg(0))
 		if err != nil {
-			fmt.Printf("Unable to open file: %s", err)
+			fmt.Fprintf(os.Stderr, "Unable to open file: %s\n", err)
 			os.Exit(1)
 			return
 		}
@@ -44,7 +44,7 @@ func main() {
 
 	inputBytes, err := io.ReadAll(reader)
 	if err != nil {
-		fmt.Printf("Unable to read: %s", err)
+		fmt.Fprintf(os.Stderr, "Unable to read: %s\n", err)
 		os.Exit(1)
 		return
 	}
@@ -52,17 +52,17 @@ func main() {
 	var feature format.Feature
 	err = json.Unmarshal(inputBytes, &feature)
 	if err != nil {
-		fmt.Printf("Invalid JSON: %s", err)
+		fmt.Fprintf(os.Stderr, "Invalid JSON: %s\n", err)
 		os.Exit(1)
 		return
 	}
 
 	outputBytes, err := format.FormatFeature(&feature)
 	if err != nil {
-		fmt.Printf("Failed to format feature: %s", err)
+		fmt.Fprintf(os.Stderr, "Failed to format feature: %s\n", err)
 		os.Exit(1)
 		return
 	}
 
-	fmt.Printf("%s", outputBytes)
+	fmt.Fprintf(os.Stdout, "%s", outputBytes)
 }
