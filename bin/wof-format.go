@@ -24,7 +24,7 @@ func main() {
 			return
 		}
 
-		if info.Mode()&os.ModeCharDevice != 0 || info.Size() <= 0 {
+		if (info.Mode() & os.ModeCharDevice) != 0 {
 			fmt.Println("Usage: cat input.geojson | wof-format > output.geojson")
 			os.Exit(1)
 			return
