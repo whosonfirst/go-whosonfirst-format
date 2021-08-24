@@ -57,6 +57,9 @@ func main() {
 		return
 	}
 
+	// coerce types of properties (recursively)
+	feature.Properties = format.Coerce(feature.Properties, "$.properties")
+
 	outputBytes, err := format.FormatFeature(&feature)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to format feature: %s\n", err)

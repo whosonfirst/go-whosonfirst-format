@@ -7,4 +7,5 @@ require (
 	github.com/sergi/go-diff v1.0.0 // indirect
 	github.com/stretchr/testify v1.4.0 // indirect
 	github.com/tidwall/pretty v1.2.0
+	golang.org/x/text v0.3.7 // indirect
 )
