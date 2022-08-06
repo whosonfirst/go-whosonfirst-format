@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -49,15 +48,7 @@ func main() {
 		return
 	}
 
-	var feature format.Feature
-	err = json.Unmarshal(inputBytes, &feature)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Invalid JSON: %s\n", err)
-		os.Exit(1)
-		return
-	}
-
-	outputBytes, err := format.FormatFeature(&feature)
+	outputBytes, err := format.FormatBytes(inputBytes)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to format feature: %s\n", err)
 		os.Exit(1)
