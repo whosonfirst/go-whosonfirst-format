@@ -6,12 +6,14 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"log"
 	"os"
 
 	format "github.com/whosonfirst/go-whosonfirst-format"
 )
 
 func main() {
+	l := log.New(os.Stderr, "", 0)
 	flag.CommandLine.SetOutput(os.Stderr)
 
 	flag.Usage = func() {
@@ -28,38 +30,35 @@ func main() {
 	flag.Parse()
 
 	if *outputFlag != "" && *overwriteFlag {
-		fmt.Fprintf(os.Stderr, "You cannot combine the -output and -overwrite flags\n")
-		os.Exit(1)
+		l.Fatalf("You cannot combine the -output and -overwrite flags\n")
+		return
 	}
 
 	if *checkFlag && *outputFlag != "" {
-		fmt.Fprintf(os.Stderr, "You cannot combine the -check and -output flags\n")
-		os.Exit(1)
+		l.Fatalf("You cannot combine the -check and -output flags\n")
+		return
 	}
 
 	if *checkFlag && *overwriteFlag {
-		fmt.Fprintf(os.Stderr, "You cannot combine the -check and -overwrite flags\n")
-		os.Exit(1)
+		l.Fatalf("You cannot combine the -check and -overwrite flags\n")
+		return
 	}
 
 	path, reader, err := inputReader()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%v\n", err)
-		os.Exit(1)
+		l.Fatalf("Error reading: %v\n", err)
 		return
 	}
 
 	inputBytes, err := io.ReadAll(reader)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%v\n", err)
-		os.Exit(1)
+		l.Fatalf("%v\n", err)
 		return
 	}
 
 	outputBytes, err := format.FormatBytes(inputBytes)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%v\n", err)
-		os.Exit(1)
+		l.Fatalf("%v\n", err)
 		return
 	}
 
@@ -70,7 +69,7 @@ func main() {
 		}
 
 		if path != "" {
-			fmt.Fprintf(os.Stderr, "%s is not valid\n", path)
+			l.Printf("%s is not valid\n", path)
 		}
 
 		os.Exit(1)
@@ -83,16 +82,16 @@ func main() {
 	if *outputFlag != "" {
 		output, err = os.Create(*outputFlag)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "unable to open %s for writing\n", *outputFlag)
-			os.Exit(1)
+			l.Fatalf("Unable to open %s for writing\n", *outputFlag)
+			return
 		}
 	}
 
 	if *overwriteFlag && path != "" {
 		output, err = os.Create(path)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "unable to open %s for writing\n", *outputFlag)
-			os.Exit(1)
+			l.Fatalf("Unable to open %s for writing\n", *outputFlag)
+			return
 		}
 	}
 
@@ -100,8 +99,8 @@ func main() {
 
 	_, err = buffer.Write(outputBytes)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "unable to write\n")
-		os.Exit(1)
+		log.Fatalf("Unable to write: %v\n", err)
+		return
 	}
 
 	buffer.Flush()
