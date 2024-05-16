@@ -1,9 +1,9 @@
 # github.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883
 ## explicit
 github.com/andreyvit/diff
-# github.com/sergi/go-diff v1.2.0
-## explicit
+# github.com/sergi/go-diff v1.3.1
+## explicit; go 1.12
 github.com/sergi/go-diff/diffmatchpatch
-# github.com/tidwall/pretty v1.2.0
-## explicit
+# github.com/tidwall/pretty v1.2.1
+## explicit; go 1.16
 github.com/tidwall/pretty
