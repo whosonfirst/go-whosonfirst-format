@@ -56,7 +56,7 @@ Optional arguments:
     	write the output to a file instead of stdout
   -overwrite
     	overwrite the input file with the formatted output
-``	
+```	
 
 For example:
 
