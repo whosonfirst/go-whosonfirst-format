@@ -1,4 +1,3 @@
-GOROOT=$(shell go env GOROOT)
 GOMOD=$(shell test -f "go.work" && echo "readonly" || echo "vendor")
 LDFLAGS=-s -w
 
@@ -19,3 +18,14 @@ wasmjs:
 .PHONY: test
 test:
 	go test -v ./...
+
+expected:
+	@make cli
+	@make expected-single NAME=collapsed_arrays
+	@make expected-single NAME=fully_formatted
+	@make expected-single NAME=one_line_hierarchy
+	@make expected-single NAME=uglify_geometry
+
+expected-single:
+	bin/wof-format fixtures/$(NAME).geojson > fixtures/$(NAME).expected.geojson
+
