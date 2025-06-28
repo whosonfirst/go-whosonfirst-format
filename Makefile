@@ -8,9 +8,7 @@ build:
 	@make wasmjs
 
 cli:
-	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" \
-		-o bin/wof-format \
-		./cmd/wof-format/main.go
+	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/wof-format ./cmd/wof-format/main.go
 
 wasmjs:
 	GOOS=js GOARCH=wasm \
