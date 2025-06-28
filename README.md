@@ -12,23 +12,24 @@ Usable as both a library and a binary.
 
 ```golang
 import (
+       "fmt"
        "io/ioutil"
        
-       "github.com/paulmach/orb/geojson"
        "github.com/whosonfirst/go-whosonfirst-format"
 )
 
 func main() {
 
 	inputBytes, _ := ioutil.ReadFile(inputPath)
-	feature, _ := geojson.UnmarshalFeature(inputBytes)
-  
-	outputBytes, _ := format.FormatFeature(feature)
+	outputBytes, _ := format.FormatBytes(feature)
+	
 	fmt.Printf("%s", outputBytes)
 }
 ```
 
 _Error handling removed for the sake of brevity._
+
+There is also a `FormatFeature` method which takes as its input	a `paulmach/orb/geojson.Feature` object (this is what the `FormatBytes` method is calling under the hood in order to ensure valid GeoJSON input).
 
 ## Tools
 
