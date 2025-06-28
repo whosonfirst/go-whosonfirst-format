@@ -1,7 +1,6 @@
-package format_test
+package format
 
 import (
-	"encoding/json"
 	"io/ioutil"
 	"os"
 	"path"
@@ -9,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/andreyvit/diff"
-	format "github.com/whosonfirst/go-whosonfirst-format"
+	"github.com/paulmach/orb/geojson"
 )
 
 const fixturesPath = "fixtures"
@@ -25,14 +24,13 @@ func testFile(t *testing.T, inputPath string, expectedOutputPath string) {
 		t.Error(err)
 	}
 
-	var feature format.Feature
+	feature, err := geojson.UnmarshalFeature(inputBytes)
 
-	json.Unmarshal(inputBytes, &feature)
 	if err != nil {
 		t.Error(err)
 	}
 
-	b, err := format.FormatFeature(&feature)
+	b, err := FormatFeature(feature)
 	if err != nil {
 		t.Error(err)
 	}
