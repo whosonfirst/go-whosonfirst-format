@@ -40,6 +40,8 @@ go build -mod vendor -ldflags="-s -w" -o bin/wof-format ./cmd/wof-format/main.go
 
 ### wof-format
 
+Format Who's On First records in files or on STDIN.
+
 ```shell
 $> ./bin/wof-format -h
 Usage: ./bin/wof-format [-check] [input]
@@ -70,7 +72,7 @@ $> cat input.geojson | ./bin/wof-format > output.geojson
 
 The `wof-format` functionality is also available as a JavaScript compatible WebAssembly (WASM) binary. The binary comes precompiled with this package but if you need or want to rebuild it the simplest way to do that is to use the handy `wasmjs` Makefile target.
 
-```
+```shell
 $> make wasmjs
 GOOS=js GOARCH=wasm \
 		go build -mod vendor -ldflags="-s -w" \
@@ -78,9 +80,9 @@ GOOS=js GOARCH=wasm \
 		cmd/wof-format-wasm/main.go
 ```
 
-To test the binary open the web application in `www/index.html` using the HTTP server of your choice. I like to use [aaronland/go-http-fileserver](#) but that's mostly because I wrote it. Any old web server will do. For example:
+To test the binary open the web application in `www/index.html` using the HTTP server of your choice. I like to use [aaronland/go-http-fileserver](https://github.com/aaronland/go-http-fileserver) but that's mostly because I wrote it. Any old web server will do. For example:
 
-```
+```shell
 $> fileserver -root www
 2025/06/28 06:50:46 Serving www and listening for requests on http://localhost:8080
 ```
