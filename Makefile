@@ -15,7 +15,7 @@ cli:
 wasmjs:
 	GOOS=js GOARCH=wasm \
 		go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -tags wasmjs \
-		-o static/wasm/wof_format.wasm \
+		-o www/wasm/wof_format.wasm \
 		cmd/wof-format-wasm/main.go
 
 .PHONY: test
