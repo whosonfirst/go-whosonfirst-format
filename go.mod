@@ -10,5 +10,5 @@ require (
 
 require (
 	github.com/sergi/go-diff v1.4.0 // indirect
-	go.mongodb.org/mongo-driver v1.11.4 // indirect
+	go.mongodb.org/mongo-driver v1.17.7 // indirect
 )
